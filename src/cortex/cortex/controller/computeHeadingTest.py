@@ -48,15 +48,15 @@ class BTRoot(rcl.Node):
         seq.add_child(compute_heading)
     
         # tick length parameter for ticking the behavior tree
-        self.declare_parameter('tick_length', 1.0)
-        TICK_LENGTH = self.get_parameter('tick_length').get_parameter_value().double_value
+        # self.declare_parameter('tick_length', 1.0)
+        # TICK_LENGTH = self.get_parameter('tick_length').get_parameter_value().double_value
 
-        self.timer = self.create_timer(TICK_LENGTH, self.evaluate)
+        # self.timer = self.create_timer(TICK_LENGTH, self.evaluate)
 
     def evaluate(self):
         result = self.root.evaluate()
         self.get_logger().info(f'Root node {self.root.name} EVALUATED to {result}')
-        self.destroy_node()
+        #self.destroy_node()
 
 
 
@@ -68,7 +68,9 @@ def main(args=None):
     # behavior tree root node is ticked by internal timer
     # returning true makes the node self destruct
     # spin() handles callbacks incurred by timer object
-    rclpy.spin(root)
+    #rclpy.spin_once(root)
+
+    root.evaluate()
 
     root.destroy_node()
     rclpy.shutdown()
