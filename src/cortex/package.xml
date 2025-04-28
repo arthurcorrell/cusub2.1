@@ -3,8 +3,8 @@
 <package format="3">
   <name>cortex</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="arthurcorrell@gmail.com">curobosub</maintainer>
+  <description>Behavior tree instance and decision logic</description>
+  <maintainer email="arthurcorrell@gmail.com">arthurcorrell</maintainer>
   <license>Apache-2.0</license>
 
   <depend>[rclpy</depend>

@@ -13,13 +13,14 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='curobosub',
+    maintainer='arthurcorrell',
     maintainer_email='arthurcorrell@gmail.com',
-    description='TODO: Package description',
+    description='Behavior tree instance and decision logic',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'compute_heading_test = cortex.controller.computeHeadingTest:main'
         ],
     },
 )
