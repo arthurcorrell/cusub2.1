@@ -22,11 +22,12 @@ class BTRoot(rcl.Node):
         self.blackboard = BehaviorTree.Blackboard()
 
         # recieve target object from main behaviortree
-        cur_obj = 'bottle'
+        cur_obj = 'cup'
         self.blackboard['current_object'] = cur_obj
 
         # initialize blackboard (TODO: from JSON)
-        self.blackboard[cur_obj] = [0.21, 0.045]
+        self.blackboard[cur_obj] = [0.215, 0.089]
+
         self.blackboard['focal_length'] = 0.0025
         self.blackboard['image_size'] = [640, 480]
         self.blackboard['sensor_size'] = [3.673e-3, 2.738e-3]

@@ -2,22 +2,34 @@
 # behaviortree package
 import behavior_tree.BehaviorTree as BehaviorTree
 
+from rclpy.logging import get_logger
 
 
 class computeHeading(BehaviorTree.Action):
     def __init__(self):
         BehaviorTree.Action.__init__(self, name='compute_heading', action=self.compute_heading)
-        
+        self.logger = get_logger('compute_heading')
+
     def compute_heading(self):
         # see https://www.scantips.com/lights/subjectdistance.html for more info
 
         obj_names = self.blackboard['object_names']
+        cur_obj = self.blackboard['current_object']
 
         if len(obj_names) == 0:
             return False
+        
+        # default to first object if cur_obj is not detected
+        index = 0
+        for i, o in enumerate(obj_names):
+            if o == cur_obj:
+                index = i
+                self.logger.info(f'Detected {cur_obj} in frame')
+
 
         # bounding box coordinates of top left and bottom right
-        tl, br = self.blackboard['top_left'], self.blackboard['bottom_right']
+        tl, br = self.blackboard['top_left'][index*2:(index*2)+2], self.blackboard['bottom_right'][index*2:(index*2)+2]
+
 
         # bounding box x, y dims in pixels - object must not be tilted skewed or foreshortened
         px, py = br[0]-tl[0], br[1]-tl[1]
@@ -29,7 +41,6 @@ class computeHeading(BehaviorTree.Action):
 
         # size of currently tracked object; supplied by parent tree
         f = self.blackboard['focal_length']
-        cur_obj = self.blackboard['current_object']
         X, Y = self.blackboard[cur_obj]
 
         # pinhole projection formula
@@ -39,7 +50,7 @@ class computeHeading(BehaviorTree.Action):
         self.blackboard['current_object_distance'] = d1
 
         # difference between object and image center in pixels
-        cx, cy = self.blackboard['object_positions_x'][0], self.blackboard['object_positions_y'][0]
+        cx, cy = self.blackboard['object_positions_x'][index], self.blackboard['object_positions_y'][index]
         dx, dy = cx - (rx/2), cy - (ry/2)
         x_fov, y_fov = self.blackboard['fov']
         theta_x, theta_y = (dx / rx) * x_fov, (dy / ry) * y_fov
