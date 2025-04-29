@@ -11,6 +11,8 @@ A custom computeHeading node which reads object detection data, as well as image
 **controller.computeHeadingTest** 
 Tests the computeHeading node in a full BT, with other nodes that read metadata, subscribe to topics, and request services. 
 
+ROS PARAMETERS: string: current_object
+
 
 ### How to contribute
 
