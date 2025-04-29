@@ -22,7 +22,10 @@ class BTRoot(rcl.Node):
         self.blackboard = BehaviorTree.Blackboard()
 
         # recieve target object from main behaviortree
-        cur_obj = 'cup'
+        self.declare_parameter('current_object', 'bottle')
+        cur_obj = self.get_parameter('current_object').get_parameter_value().string_value
+        self.get_logger().info(f'Current object is set to: {cur_obj}')
+        
         self.blackboard['current_object'] = cur_obj
 
         # initialize blackboard (TODO: from JSON)
