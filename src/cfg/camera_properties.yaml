@@ -1,0 +1,4 @@
+'focal_length': 0.0025
+'image_size': [640, 480]
+'sensor_size': [3.673e-3, 2.738e-3]
+'fov': [95, 70] # for this camera: https://www.waveshare.com/product/ov5693-5mp-usb-camera-a.htm
