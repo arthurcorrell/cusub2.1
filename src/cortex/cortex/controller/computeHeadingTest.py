@@ -32,7 +32,10 @@ class BTRoot(rcl.Node):
         # get current object dimensions
         with open('src/cfg/object_properties.yaml') as f:
             file = yaml.safe_load(f)
-            self.blackboard[cur_obj] = file['cur_object']
+            try:
+                self.blackboard[cur_obj] = file[cur_obj]
+            except KeyError:
+                self.get_logger().error(f'No object propertie for {cur_obj}. Defaulting to cup (nalgene bottle)')
 
         # get camera properties
         with open('src/cfg/camera_properties.yaml') as f:
@@ -66,7 +69,6 @@ class BTRoot(rcl.Node):
     def evaluate(self):
         result = self.root.evaluate()
         self.get_logger().info(f'Root node {self.root.name} EVALUATED to {result}')
-        #self.destroy_node()
 
 
 
