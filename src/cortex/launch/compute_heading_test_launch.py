@@ -8,7 +8,7 @@ def generate_launch_description():
             namespace='test',
             executable='compute_heading_test',
             name='bt_root', 
-            parameters=[{'current_object':'cup'}]
+            parameters=[{'current_object':'cup', 'tick_length':2.0}]
         ),
         Node(
             package='chimera_camera',

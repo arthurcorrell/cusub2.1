@@ -19,12 +19,15 @@ class computeHeading(BehaviorTree.Action):
         if len(obj_names) == 0:
             return False
         
-        # default to first object if cur_obj is not detected
+        if cur_obj not in obj_names:
+            return False
+        
         index = 0
         for i, o in enumerate(obj_names):
             if o == cur_obj:
                 index = i
                 self.logger.info(f'Detected {cur_obj} in frame')
+                break
 
 
         # bounding box coordinates of top left and bottom right

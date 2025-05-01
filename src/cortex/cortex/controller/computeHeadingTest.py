@@ -60,16 +60,26 @@ class BTRoot(rcl.Node):
 
         compute_heading = computeHeading()
 
+        # no errror handling required; if compute_heading fails 1st time the seq is terminated
+        def format_data():
+            c_o = self.blackboard['current_object']
+            c_o_d = self.blackboard['current_object_distance']
+            c_o_h = self.blackboard['current_object_heading']
+            return f'current object: {c_o} | \n distance: {c_o_d} | \n heading: {c_o_h}'
+
+        publish_metadata = BTPublisher('publish_metadata', 'image_metadata', format_data)
+
         # level order initialisation
         self.root.child = seq
         seq.add_child(get_obj)
         seq.add_child(compute_heading)
+        seq.add_child(publish_metadata)
     
         # tick length parameter for ticking the behavior tree
-        # self.declare_parameter('tick_length', 1.0)
-        # TICK_LENGTH = self.get_parameter('tick_length').get_parameter_value().double_value
+        self.declare_parameter('tick_length', 1.0)
+        TICK_LENGTH = self.get_parameter('tick_length').get_parameter_value().double_value
 
-        # self.timer = self.create_timer(TICK_LENGTH, self.evaluate)
+        self.timer = self.create_timer(TICK_LENGTH, self.evaluate)
 
     def evaluate(self):
         result = self.root.evaluate()
@@ -85,9 +95,9 @@ def main(args=None):
     # behavior tree root node is ticked by internal timer
     # returning true makes the node self destruct
     # spin() handles callbacks incurred by timer object
-    #rclpy.spin_once(root)
+    rclpy.spin(root)
 
-    root.evaluate()
+    #root.evaluate()
 
     root.destroy_node()
     rclpy.shutdown()
