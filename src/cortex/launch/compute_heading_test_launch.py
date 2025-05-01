@@ -15,13 +15,13 @@ def generate_launch_description():
             namespace='test',
             executable='camera_node',
             name='CameraPublisher',
-            parameters=[{'camera_port':2, 'display_output':True}]
+            parameters=[{'camera_port':0, 'display_output':True}]
         ),
         Node(
             package='chimera_camera',
             namespace='test',
             executable='camera_node_raw',
             name='CameraPublisherRaw',
-            parameters=[{'camera_port':2, 'fps':30}]
+            parameters=[{'camera_port':2, 'fps':15}]
         )
     ])

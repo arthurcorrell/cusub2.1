@@ -1,6 +1,8 @@
 import rclpy
 import rclpy.node as rcl
 import yaml
+from ament_index_python.packages import get_package_share_directory
+import os
 
 # behaviortree package
 import behavior_tree.BehaviorTree as BehaviorTree
@@ -29,8 +31,11 @@ class BTRoot(rcl.Node):
         
         self.blackboard['current_object'] = cur_obj
 
+        # yaml filepaths
+        package_share_directory = get_package_share_directory('cortex')
+
         # get current object dimensions
-        with open('src/cfg/object_properties.yaml') as f:
+        with open(os.path.join(package_share_directory, 'config','object_properties.yaml')) as f:
             file = yaml.safe_load(f)
             try:
                 self.blackboard[cur_obj] = file[cur_obj]
@@ -38,7 +43,7 @@ class BTRoot(rcl.Node):
                 self.get_logger().error(f'No object propertie for {cur_obj}. Defaulting to cup (nalgene bottle)')
 
         # get camera properties
-        with open('src/cfg/camera_properties.yaml') as f:
+        with open(os.path.join(package_share_directory, 'config','camera_properties.yaml')) as f:
             file = yaml.safe_load(f)
             self.blackboard['focal_length'] = file['focal_length']
             self.blackboard['image_size'] = file['image_size']
