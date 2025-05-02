@@ -6,7 +6,7 @@ import behavior_tree.BehaviorTree as BehaviorTree
 
 
 class BTClient(rcl.Node, BehaviorTree.Action):
-    def __init__(self, name : str, srv_obj, srv_name: str, **kwargs):
+    def __init__(self, name : str, srv_obj, srv_name: str, req_params: dict = {}, **kwargs):
         rcl.Node.__init__(self, name)
         BehaviorTree.Action.__init__(self, name, self.action, **kwargs)
 
@@ -14,9 +14,12 @@ class BTClient(rcl.Node, BehaviorTree.Action):
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info(f'waiting for {srv_name}...')
         self.req = srv_obj.Request()
+        self.req_params = req_params
     
     # request object is not populated
     def send_request(self):
+        for attr, data in self.req_params.items():
+            setattr(self.req, attr, data)
         return self.cli.call_async(self.req)
     
     def action(self, response):
