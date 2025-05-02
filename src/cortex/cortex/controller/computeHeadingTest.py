@@ -28,8 +28,12 @@ class BTRoot(rcl.Node):
         self.declare_parameter('current_object', 'bottle')
         cur_obj = self.get_parameter('current_object').get_parameter_value().string_value
         self.get_logger().info(f'Current object is set to: {cur_obj}')
-        
         self.blackboard['current_object'] = cur_obj
+
+        self.declare_parameter('camera_id', 'front')
+        camera_id = self.get_parameter('camera_id').get_parameter_value().string_value
+        self.get_logger().info(f'Camera ID is set to: {camera_id}')
+        self.blackboard['camera_id'] = camera_id
 
         # yaml filepaths
         package_share_directory = get_package_share_directory('cortex')
@@ -56,7 +60,8 @@ class BTRoot(rcl.Node):
         
         seq = BehaviorTree.Sequence(name='seq')
 
-        get_obj = BTClient(name='get_obj', srv_obj=DetectObjects, srv_name='detect_objects')
+        # req params holds request attribute and value for custom service
+        get_obj = BTClient(name='get_obj', srv_obj=DetectObjects, srv_name='detect_objects', req_params={'camera_id':camera_id})
 
         compute_heading = computeHeading()
 

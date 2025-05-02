@@ -5,13 +5,26 @@ Updated: Apr 28 2025
 
 
 **behavior.compute_heading** 
-A custom computeHeading node which reads object detection data, as well as image and camera metadata, and computes heading and distance. It reads and writes everything from a global blackboard, which is populated by other BT nodes. 
+A custom computeHeading node which reads object detection data, as well as image and camera metadata, and computes heading and distance. It reads and writes everything from a global blackboard, which is populated by other BT nodes. WARNING: uses the pinhole projection formula, which relies on accurate camera metadata. These are fed into the blackboard from a yaml in /config.
 
 
 **controller.computeHeadingTest** 
-Tests the computeHeading node in a full BT, with other nodes that read metadata, subscribe to topics, and request services. 
+Tests the computeHeading node in a full BT, with other nodes that read metadata, subscribe to topics, and request services. The BTs root is ticked by a timer callback
 
-ROS PARAMETERS: string: current_object
+ROS PARAMETERS: 
+
+current_object, string, specifies an object to compute the heading to. Known objects are stored in a yaml in /config. 
+
+tick_length, float, the length between timer callbacks 
+
+camera_id, string, one of a set of camera id's corresponding to an image_raw topic. Currently one of {front, rear, top, bottom}. This is subject to change. Accepted camera_id's are defined in the chimera_camera package. For more info, see the DetectObjects.srv interface.
+
+
+**/config**
+
+object_properties: maps YOLO object string to their dimensions [x, y]
+
+camera_properties: stores camera metadata for a single camera type. Will be updated for multiple camerea types as more hardware is added to the sub
 
 
 ### How to contribute

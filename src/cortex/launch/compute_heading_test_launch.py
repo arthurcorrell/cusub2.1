@@ -5,24 +5,27 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='cortex',
-            namespace='test',
             executable='compute_heading_test',
             name='bt_root', 
-            parameters=[{'current_object':'cup', 'tick_length':2.0}]
+            parameters=[{'current_object':'cup', 'camera_id':'front', 'tick_length':2.0}]
         ),
         Node(
             package='chimera_camera',
-            namespace='test',
+            executable='camera_node_raw',
+            name='WebCam',
+            parameters=[{'camera_port':0, 'fps':30, 'camera_id':'front'}]
+        ),
+        Node(
+            package='chimera_camera',
+            executable='camera_node_raw',
+            name='SubCam1',
+            parameters=[{'camera_port':2, 'fps':15, 'camera_id':'bottom'}]
+        ),
+        Node(
+            package='chimera_camera',
             executable='camera_node',
             name='CameraPublisher',
-            parameters=[{'camera_port':0, 'display_output':True}]
-        ),
-        Node(
-            package='chimera_camera',
-            namespace='test',
-            executable='camera_node_raw',
-            name='CameraPublisherRaw',
-            parameters=[{'camera_port':2, 'fps':15}]
+            parameters=[{'display_output':True}]
         ),
         Node(
             package='foxglove_bridge',
